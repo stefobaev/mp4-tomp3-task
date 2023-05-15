@@ -1,0 +1,3 @@
+variable "queueName" {
+    default = "baevQueue"
+}
