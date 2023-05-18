@@ -14,8 +14,8 @@
             // Redirect to Cognito login page
             function redirectToLogin() {
                 var clientId = '${clientId}';
-                var redirectUri = 'https://baevsociety.com';
-                var loginUrl = "https://baevsociety.auth.${region}.amazoncognito.com/login?client_id=${clientId}&response_type=code&scope=email+openid+phone&redirect_uri=https%3A%2F%2Fbaevsociety.com";
+                var redirectUri = 'https://domain.com';
+                var loginUrl = "https://domain.auth.${region}.amazoncognito.com/login?client_id=${clientId}&response_type=code&scope=email+openid+phone&redirect_uri=https%3A%2F%2Fdomain.com";
                 window.location.href = loginUrl;
             }
          
@@ -28,8 +28,8 @@
             // Get the temporary credentials for the authenticated user
             function getCredentials(authCode) {
                 var clientId = '${clientId}';
-                var redirectUri = 'https://baevsociety.com';
-                var authEndpoint = 'https://baevsociety.auth.${region}.amazoncognito.com/oauth2/token';
+                var redirectUri = 'https://domain.com';
+                var authEndpoint = 'https://domian.auth.${region}.amazoncognito.com/oauth2/token';
             
                 var params = {
                     grant_type: 'authorization_code',
@@ -73,7 +73,7 @@
             function logout() {
             AWS.config.credentials = null;
             localStorage.clear();
-            window.location.href = "https://baevsociety.auth.${region}.amazoncognito.com/logout?client_id=${clientId}&logout_uri=https%3A%2F%2Fbaevsociety.com";
+            window.location.href = "https://domain.auth.${region}.amazoncognito.com/logout?client_id=${clientId}&logout_uri=https%3A%2F%2Fdomain.com";
             }
          
             $(document).ready(function() {
