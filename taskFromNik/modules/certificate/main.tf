@@ -5,8 +5,8 @@ provider "aws" {
 
 resource "aws_acm_certificate" "example" {
   provider = aws.east
-  domain_name               = "baevsociety.com"
-  subject_alternative_names = ["www.baevsociety.com"]
+  domain_name               = "you-domain.com"
+  subject_alternative_names = ["www.your-domain.com"]
   validation_method         = "DNS"
 }
 
@@ -16,7 +16,7 @@ resource "aws_route53_record" "example" {
       name    = dvo.resource_record_name
       record  = dvo.resource_record_value
       type    = dvo.resource_record_type
-      zone_id = "Z0637605ZR276D7FVLBB"
+      zone_id = "yor-hosted-zone"
     }
   }
 
