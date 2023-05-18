@@ -58,7 +58,7 @@ resource "aws_s3_object" "uploadedFolder2" {
 }
 
 locals {
-  zip_file_path = "/home/ec2-user/taskFromNik/modules/s3/mypackage.zip"
+  zip_file_path = "path/to/zmypackage.zip"
 }
 
 resource "aws_s3_object" "uploadPackageFile" {
