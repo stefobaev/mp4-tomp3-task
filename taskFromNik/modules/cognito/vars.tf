@@ -23,7 +23,7 @@ variable "recoveryMech" {
 }
 
 variable "domainName" {
-    default = "baevsociety"
+    default = "your-domain"
 }
 
 variable "appName" {
@@ -39,7 +39,7 @@ variable "tokenValidity" {
 }
 
 variable "identityName" {
-    default = "fedBaev"
+    default = "fedNameaev"
 }
 
 variable "userPoolId" {}
@@ -47,5 +47,5 @@ variable "userPoolId" {}
 variable "clientId" {}
 
 variable "awsAccountId" { 
-    default = 089370973671
+    default = your-acc-id
 }
