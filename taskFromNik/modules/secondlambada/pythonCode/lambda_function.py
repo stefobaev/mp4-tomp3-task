@@ -8,7 +8,7 @@ ses = boto3.client('ses')
 
 def lambda_handler(event,context):
     # URL of the SQS queue
-    queue_url = 'https://sqs.eu-central-1.amazonaws.com/089370973671/baevQueue'
+    queue_url = 'your-queque'
     
     response = sqs.receive_message(
         QueueUrl=queue_url,
@@ -24,7 +24,7 @@ def lambda_handler(event,context):
         
         print(f"I got the following: {filename} and {email}")
         
-        bucket = 'bucket-for-nik-task-convertor-mp4-to-mp3'
+        bucket = 'your-bucket'
         object_key = f'processed/{filename}'
         
         url = s3.generate_presigned_url(
@@ -41,7 +41,7 @@ def lambda_handler(event,context):
         
         try:
             ses.send_email(
-                Source='stefobaev@gmail.com',
+                Source='your-email',
                 Destination={
                     'ToAddresses': [email]
                 },
