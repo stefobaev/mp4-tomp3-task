@@ -6,7 +6,7 @@ from moviepy.editor import VideoFileClip
 
 s3 = boto3.client('s3')
 sqs = boto3.client('sqs')
-queue_url = "https://sqs.eu-central-1.amazonaws.com/089370973671/baevQueue"
+queue_url = "your-queque"
 
 def lambda_handler(event,context):
     bucket = event['Records'][0]['s3']['bucket']['name']
