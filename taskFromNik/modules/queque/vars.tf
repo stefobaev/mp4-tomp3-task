@@ -1,3 +1,3 @@
 variable "queueName" {
-    default = "baevQueue"
+    default = "Queue"
 }
