@@ -17,7 +17,7 @@ resource "aws_cloudfront_distribution" "example" {
   is_ipv6_enabled     = true
   default_root_object = var.cloudFrontDefaultRootObject
 
-  aliases = ["baevsociety.com", "www.baevsociety.com"]
+  aliases = ["your-domain.com", "www.your-domain.com"]
 
   default_cache_behavior {
     allowed_methods  = ["GET", "HEAD", "OPTIONS", "PUT", "POST", "PATCH", "DELETE"]
@@ -50,9 +50,9 @@ resource "aws_cloudfront_distribution" "example" {
   }
 }
 
-resource "aws_route53_record" "baevsociety_com" {
+resource "aws_route53_record" "domaincom" {
   zone_id = var.hostedZoneId
-  name    = "baevsociety.com"
+  name    = "your-domain"
   type    = "A"
 
   alias {
@@ -62,9 +62,9 @@ resource "aws_route53_record" "baevsociety_com" {
   }
 }
 
-resource "aws_route53_record" "www_baevsociety_com" {
+resource "aws_route53_record" "www_domain_com" {
   zone_id = var.hostedZoneId
-  name    = "www.baevsociety.com"
+  name    = "www.domain.com"
   type    = "A"
 
   alias {
