@@ -1,5 +1,5 @@
-resource "aws_iam_role" "lambda_role" {
-  name = "lambda_role"
+resource "aws_iam_role" "first_lambda_role" {
+  name = "first_lambda_role"
 
   assume_role_policy = jsonencode({
     Version = "2012-10-17"
@@ -15,68 +15,29 @@ resource "aws_iam_role" "lambda_role" {
   })
 }
 
-resource "aws_iam_role_policy" "lambda_policy" {
-  name = "lambda_policy"
+resource "aws_iam_role_policy" "first_lambda_policy" {
+  name   = "first_lambda_policy"
+  role   = aws_iam_role.first_lambda_role.id
   policy = jsonencode({
-
     "Version": "2012-10-17",
     "Statement": [
-        {
-            "Effect": "Allow",
-            "Action": [
-                "autoscaling:Describe*",
-                "cloudwatch:*",
-                "logs:*",
-                "sns:*",
-                "iam:GetPolicy",
-                "iam:GetPolicyVersion",
-                "iam:GetRole",
-                "oam:ListSinks"
-            ],
-            "Resource": "*"
-        },
-        {
-            "Effect": "Allow",
-            "Action": "iam:CreateServiceLinkedRole",
-            "Resource": "arn:aws:iam::*:role/aws-service-role/events.amazonaws.com/AWSServiceRoleForCloudWatchEvents*",
-            "Condition": {
-                "StringLike": {
-                    "iam:AWSServiceName": "events.amazonaws.com"
-                }
-            }
-        },
-        {
-            "Effect": "Allow",
-            "Action": [
-                "oam:ListAttachedLinks"
-            ],
-            "Resource": "arn:aws:oam:*:*:sink/*"
-        },
-        {
-            "Effect": "Allow",
-            "Action": [
-                "ses:*"
-            ],
-            "Resource": "*"
-        },
-        {
-            "Action": [
-                "sqs:*"
-            ],
-            "Effect": "Allow",
-            "Resource": "*"
-        },
-        {
-            "Effect": "Allow",
-            "Action": [
-                "s3:*",
-                "s3-object-lambda:*"
-            ],
-            "Resource": "*"
-        }
+      {
+        "Effect": "Allow",
+        "Action": "s3:*",
+        "Resource": "*"
+      },
+      {
+        "Effect": "Allow",
+        "Action": "sqs:*",
+        "Resource": "*"
+      },
+      {
+        "Effect": "Allow",
+        "Action": "cloudwatch:*",
+        "Resource": "*"
+      }
     ]
   })
-  role = aws_iam_role.lambda_role.name
 }
 
 data "archive_file" "zipPythonCode" {
@@ -90,12 +51,12 @@ resource "aws_lambda_layer_version" "baev_layer" {
   compatible_runtimes = ["python3.10"]
   layer_name         = "baevLayer"
   s3_bucket          = "bucket-for-nik-task-convertor-mp4-to-mp3"
-  s3_key             = "mypackage.zip"
+  s3_key             = "package/mypackage.zip"
 }
 
 resource "aws_lambda_function" "s3_lambda" {
   function_name    = "s3_lambda"
-  role             = aws_iam_role.lambda_role.arn
+  role             = aws_iam_role.first_lambda_role.arn
   handler          = "lambda_function.lambda_handler"
   runtime          = "python3.10"
   source_code_hash = base64sha256(data.archive_file.zipPythonCode.output_path)
@@ -104,20 +65,25 @@ resource "aws_lambda_function" "s3_lambda" {
   layers           = [aws_lambda_layer_version.baev_layer.arn]
 }
 
-resource "aws_s3_bucket_notification" "s3_notification" {
-  bucket = var.bucketName
+#resource "aws_s3_bucket_notification" "s3_notification" {
+#  bucket = var.bucketName
+#  depends_on = [aws_lambda_permission.s3_lambda_permission1]
+#
+#  lambda_function {
+#   lambda_function_arn = aws_lambda_function.s3_lambda.arn
+#    events              = ["s3:ObjectCreated:*"]
+#    filter_prefix       = var.prefix1
+#  }
+#}
 
-  lambda_function {
-    lambda_function_arn = aws_lambda_function.s3_lambda.arn
-    events              = ["s3:ObjectCreated:*"]
-    filter_prefix       = var.prefix
-  }
-}
-
-resource "aws_lambda_permission" "s3_lambda_permission" {
-  statement_id  = "AllowExecutionFromS3Bucket"
+resource "aws_lambda_permission" "s3_lambda_permission1" {
+  statement_id  = "AllowExecutionFromS3_1"
   action        = "lambda:InvokeFunction"
-  function_name = aws_lambda_function.s3_lambda.function_name
+  function_name = aws_lambda_function.s3_lambda.arn
   principal     = "s3.amazonaws.com"
   source_arn    = var.bucket_arn
+}
+
+output "awslambdafunc1" {
+ value = aws_lambda_function.s3_lambda.arn
 }

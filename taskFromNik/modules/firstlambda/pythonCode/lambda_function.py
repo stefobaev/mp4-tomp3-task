@@ -21,7 +21,7 @@ def lambda_handler(event,context):
     clip = VideoFileClip(input_file)
     clip.audio.write_audiofile(output_file)
     
-    processed_key = 'Processed/'+output_file.strip('/tmp')
+    processed_key = 'processed/'+output_file.strip('/tmp')
     s3.upload_file(output_file,bucket,processed_key)
     
     response = s3.head_object(Bucket=bucket, Key=key)

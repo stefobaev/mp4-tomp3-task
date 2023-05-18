@@ -11,14 +11,24 @@ terraform {
     }
 }
 
+module "ses" {
+    source = "./modules/ses"
+}
+
+module "cert" {
+    source = "./modules/certificate"
+}
+
 module "s3" {
-    source = "./modules/s3"
+    source     = "./modules/s3"
+    depends_on = [module.cert]
 }
 
 module "cognito" {
     source     = "./modules/cognito"
     userPoolId = module.cognito.userPoolId
     clientId   = module.cognito.clientId
+    depends_on = [module.s3]
 }
 
 module "uploadIndex" {
@@ -28,7 +38,7 @@ module "uploadIndex" {
     identity_pool_id = module.cognito.identity_pool_id
     userPoolId       = module.cognito.userPoolId
     bucketName       = module.s3.bucket_name
-    depends_on       = [module.s3, module.cognito]
+    depends_on       = [module.cognito]
 }
 
 module "cloudfront" {
@@ -52,9 +62,10 @@ module "firstLambada" {
 }
 
 module "secondLambada" {
-    source      = "./modules/secondlambada"
-    bucketName  = module.s3.bucket_name
-    bucket_arn  = module.s3.bucket_arn
-    queueArn    = module.queque.queueArn
-    depends_on  = [module.cloudfront, module.queque, module.firstLambada]
+    source         = "./modules/secondlambada"
+    bucketName     = module.s3.bucket_name
+    bucket_arn     = module.s3.bucket_arn
+    queueArn       = module.queque.queueArn
+    awslambdafunc1 = module.firstLambada.awslambdafunc1
+    depends_on     = [module.firstLambada]
 }

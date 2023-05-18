@@ -63,8 +63,9 @@ locals {
 
 resource "aws_s3_object" "uploadPackageFile" {
   bucket = var.bucketName
-  key = "mypackage.zip"
+  key = "package/mypackage.zip"
   source = local.zip_file_path
+  depends_on = [aws_s3_bucket.baevBucket, aws_s3_bucket_ownership_controls.baevBucketOwnership, aws_s3_bucket_public_access_block.baevOffBlockPublicAcces, aws_s3_bucket_acl.example]
 }
 
 output "bucket_name" {
