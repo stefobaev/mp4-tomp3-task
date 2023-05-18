@@ -45,7 +45,7 @@ resource "aws_cognito_user_pool_client" "myApp" {
     prevent_user_existence_errors        = var.preventUser
     refresh_token_validity               = var.tokenValidity
     allowed_oauth_flows                  = ["code"]
-    callback_urls                        = ["https://baevsociety.com"]
+    callback_urls                        = ["https://your-domain.com"]
     allowed_oauth_scopes                 = ["openid", "email", "phone"]
     supported_identity_providers         = ["COGNITO"]
     allowed_oauth_flows_user_pool_client = true
