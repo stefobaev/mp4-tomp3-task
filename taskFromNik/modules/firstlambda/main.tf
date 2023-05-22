@@ -50,7 +50,7 @@ resource "aws_lambda_layer_version" "baev_layer" {
   compatible_architectures = ["x86_64"]
   compatible_runtimes = ["python3.10"]
   layer_name         = "baevLayer"
-  s3_bucket          = "bucket-for-nik-task-convertor-mp4-to-mp3"
+  s3_bucket          = "your-bucket"
   s3_key             = "package/mypackage.zip"
 }
 
